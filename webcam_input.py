@@ -1,17 +1,19 @@
-from VideoCapture import Device
+import cv2
 
-came = Device()
-came.setResolution(320, 240)
+cv2.namedWindow("preview")
+vc = cv2.VideoCapture(-1)
 
-img = cam.getImage()
+if vc.isOpened(): # try to get the first frame
+    print("yes")
+    rval, frame = vc.read()
+else:
+    print("no")
+    rval = False
 
-#from VideoCapture import Device
-from numpy import *
-from PIL import Image
-cam = Device(devnum=0, showVideoWindow=0) #devnum=0 means you are using the device set in 0 position probably your webcam
-blackimg= cam.getImage() #this return a PIL image but I don't know why the first is always black
-#blackimag.show()#try to check if you want
-image=cam.getImage() #this is a real image PIL image
-imgarray = asarray(image) #convert the image into a matrix
-#imgarrayfloat = imgarray.astype('float') # in many cases of processing you have to convert to a float matrix because can occur overflow (e.g. for average images summing  pixels values of 255 and 3 of two images and divide by 2 gives you 1/2 for imgarray and 258/2 for imgarrayfloat
-#recovertedimage=processedimage.astype ("uint8")#if you use the previous you have to reconvert to unit8. Note processedimage is the name of the variable of your image.p.g
+while rval:
+    cv2.imshow("preview", frame)
+    rval, frame = vc.read()
+    key = cv2.waitKey(20)
+    if key == 27: # exit on ESC
+        break
+cv2.destroyWindow("preview")
