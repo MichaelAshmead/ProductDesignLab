@@ -13,9 +13,11 @@ def get_landmarks(im):
     rects = detector(im, 1)
 
     if len(rects) > 1:
-        raise TooManyFaces
+        print("Too many faces")
+        return
     if len(rects) == 0:
-        raise NoFaces
+        print("No face")
+        return
 
     return numpy.matrix([[p.x, p.y] for p in predictor(im, rects[0]).parts()])
 
@@ -38,6 +40,7 @@ def read_im_and_landmarks(fname):
 
     return im, s
 
-im1, landmarks1 = read_im_and_landmarks(sys.argv[1])
+if __name__ == "__main__":
+    im1, landmarks1 = read_im_and_landmarks(sys.argv[1])
 
-cv2.imwrite('output.jpg', annotate_landmarks(im1, landmarks1))
+    cv2.imwrite('output.jpg', annotate_landmarks(im1, landmarks1))
